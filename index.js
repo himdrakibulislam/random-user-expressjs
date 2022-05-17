@@ -6,12 +6,11 @@ const ObjectId = require('mongodb').ObjectId;
 const app = express();
 const { initializeApp } = require('firebase-admin/app');
 var admin = require("firebase-admin");
-
+const cloudinary = require('cloudinary');
 var serviceAccount = require("./drone-arial-firebase-adminsdk.json");
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
-
 const port = process.env.PORT || 5000;
 app.use(cors())
 app.use(express.json())
@@ -28,6 +27,11 @@ async function verifyToken(req,res,next){
   }
   next();
 }
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+   api_key: process.env.API_KEY,
+   api_secret: process.env.API_SECRET
+})
 async function run() {
     try {
       // Connect the client to the server
@@ -89,6 +93,25 @@ async function run() {
         const result = await orderCollection.deleteOne(query);
         res.json(result);
       });
+      // delete product 
+      app.delete('/deleteProduct/:id',async(req,res)=>{
+        const id = req.params.id;
+        const query ={_id: ObjectId(id)}
+        const result = await productCollection.deleteOne(query);
+        res.json(result);
+      })
+      // delete order 
+      app.delete('/deleteorder/:id',async(req,res)=>{
+        const id  = req.params.id;
+        const query = {_id:ObjectId(id)};
+        const result = await orderCollection.deleteOne(query);
+        res.json(result);
+      })
+      // delete image from cloudinary
+      app.delete('/deleteimage/:imageId',async(req,res)=>{
+        const id = req.params.imageId;
+         await cloudinary.uploader.destroy(id,(result)=>{res.json(result)})
+      })
       // review 
       app.post('/review',async(req,res)=>{
         const reviewDetails = req.body;
@@ -122,6 +145,16 @@ async function run() {
         const result = usersCollection.updateOne(filter,updateDocument,options)
         res.send(result);
       });
+      // update product 
+      app.put('/updateproduct/:id',async(req,res)=>{
+        const id = req.params.id;
+        const query = {_id:ObjectId(id)}
+        const updateProduct = {
+          $set: req.body
+        }
+        const result = await productCollection.updateOne(query,updateProduct);
+        res.json(result);
+      })
       // user admin 
       app.put('/user/admin',verifyToken,async(req,res)=>{
         const email = req.body.adminEmail;
