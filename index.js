@@ -41,6 +41,7 @@ async function run() {
       const orderCollection = database.collection("orders");
       const reviewCollection = database.collection("review");
       const usersCollection = database.collection("users");
+      const cartCollection = database.collection("cart");
       // add products
       app.post('/addProduct',async(req,res)=>{
         const productInfo = req.body;
@@ -59,6 +60,18 @@ async function run() {
         const result = await manage.toArray()
         res.send(result);
       });
+      // all users 
+      app.get('/allusers/:email',verifyToken,async(req,res)=>{
+        const email = req.params.email;
+        const query = {email:email};
+        const adminCheck = await usersCollection.findOne(query); 
+        const logedInEmail = req.decodedEmail;
+        if(logedInEmail && adminCheck?.role === 'admin'){
+        const users = usersCollection.find({});
+        const result = await users.toArray();
+        res.send(result);
+        }
+      })
       // place order
       app.get('/placeorder/:productId', async(req,res)=>{
         const productId = req.params.productId
@@ -73,18 +86,14 @@ async function run() {
         res.send(result);
       })
       // users orders
-      app.get('/userorders',verifyToken,async(req,res)=>{
-        const email = req.query.email;
-        const token = req.headers.authorization;
-        if(req.decodedEmail === email){
+      app.get('/userorders/:email',async(req,res)=>{
+        const email = req.params.email;
+        
           const query = {email:email}
         const userorders = orderCollection.find(query);
         const result = await userorders.toArray();
-        res.send(result)
-        }else{
-          res.status(404)
-        }
-        
+        res.send(result);
+       
       });
       // delete order
       app.delete('/userorders/:deletingId',async(req,res)=>{
@@ -193,6 +202,34 @@ async function run() {
           }
         }
         
+      });
+      // cart 
+      app.post('/cart',async(req,res)=>{
+        const cart = req.body;
+        const result = await cartCollection.insertOne(cart);
+        res.json(result);
+      });
+      // get cart
+      app.get('/cart/:email',async(req,res)=>{
+        const email = req.params.email;
+        const query = {email:email};
+        const cart =  cartCollection.find(query);
+        const result = await cart.toArray();
+        res.send(result);
+      });
+      // deleet cart items
+      app.delete('/cartdelete/:id',async(req,res)=>{
+        const id = req.params.id;
+        const query = {_id:ObjectId(id)};
+        const result = await cartCollection.deleteOne(query);
+        res.json(result);
+      });
+      // delete 
+      app.delete('/clearCart/:email',async(req,res)=>{
+        const email = req.params.email;
+        const query = {email: email};
+        const result = await cartCollection.deleteMany(query);
+        res.json(result);
       })
     } finally {
       // Ensures that the client will close when you finish/error
