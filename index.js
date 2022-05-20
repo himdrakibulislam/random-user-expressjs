@@ -8,6 +8,7 @@ const { initializeApp } = require('firebase-admin/app');
 var admin = require("firebase-admin");
 const cloudinary = require('cloudinary');
 var serviceAccount = require("./drone-arial-firebase-adminsdk.json");
+const { json } = require('express');
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
@@ -115,16 +116,32 @@ async function run() {
         const query = {_id:ObjectId(id)};
         const result = await orderCollection.deleteOne(query);
         res.json(result);
-      })
+      });
       // delete image from cloudinary
       app.delete('/deleteimage/:imageId',async(req,res)=>{
         const id = req.params.imageId;
          await cloudinary.uploader.destroy(id,(result)=>{res.json(result)})
-      })
+      });
       // review 
       app.post('/review',async(req,res)=>{
         const reviewDetails = req.body;
         const result = await reviewCollection.insertOne(reviewDetails);
+        res.json(result);
+      });
+      // delete review
+      app.delete('/deletereview/:id',async(req,res)=>{
+        const id = req.params.id;
+        const query = {_id: ObjectId(id)};
+        const result = await reviewCollection.deleteOne(query);
+        res.json(result);
+      })
+      app.put('/featuredreview/:id',async(req,res)=>{
+        const id = req.params.id;
+        const query = {_id:ObjectId(id)};
+        const featured = {
+          $set : {featured:'ok'}
+        };
+        const result = await reviewCollection.updateOne(query,featured);
         res.json(result);
       })
       // all Reviews
