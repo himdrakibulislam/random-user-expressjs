@@ -9,6 +9,7 @@ var admin = require("firebase-admin");
 const cloudinary = require('cloudinary');
 var serviceAccount = require("./drone-arial-firebase-adminsdk.json");
 const { json } = require('express');
+const os = require('os');
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
 });
@@ -43,6 +44,7 @@ async function run() {
       const reviewCollection = database.collection("review");
       const usersCollection = database.collection("users");
       const cartCollection = database.collection("cart");
+      const visitorCollection  =  database.collection("visitor");
       // add products
       app.post('/addProduct',async(req,res)=>{
         const productInfo = req.body;
@@ -51,9 +53,21 @@ async function run() {
       });
       // product
       app.get('/products',async(req,res)=>{
-        const manage = productCollection.find({})
-        const result = await manage.limit(6).toArray()
-        res.send(result)
+        const manage = productCollection.find({});
+        const result = await manage.limit(6).toArray();
+        const deviceInfo =  os.cpus();
+        const hostName = os.hostname();
+        const visitor  = {
+          model :deviceInfo[0].model ,
+          user : hostName
+        };
+        const filter = {model:deviceInfo[0].model}
+        const options = { upsert: true };
+        const updateDocument ={
+          $set:visitor
+        }
+        const visit = await visitorCollection.updateOne(filter,updateDocument,options);
+        res.send(result);
       });
       // all products
       app.get('/allProducts',async(req,res)=>{
@@ -247,6 +261,23 @@ async function run() {
         const query = {email: email};
         const result = await cartCollection.deleteMany(query);
         res.json(result);
+      });
+      // visitors 
+      app.get('/visitors/:email',verifyToken,async(req,res)=>{
+        const loginUser = req.decodedEmail;
+        if(loginUser){
+          const email = req.params.email;
+        const query = {email:email};
+        const check  = await usersCollection.findOne(query);
+        if(check.role === 'admin'){
+          const visitors = visitorCollection.find({});
+          const result = await visitors.toArray();
+          res.send(result);
+        }else{
+          res.send("404");
+        }
+        }
+        
       })
     } finally {
       // Ensures that the client will close when you finish/error
