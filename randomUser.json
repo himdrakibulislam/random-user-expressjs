@@ -1,0 +1,74 @@
+[
+  {
+    "id": 6,
+    "gender": "female",
+    "name": "Christina",
+    "contact": "00006",
+    "address": "United Kingdom,Bristol,Devon",
+    "photoUrl": "https://randomuser.me/api/portraits/women/72.jpg"
+  },
+  {
+    "id": 7,
+    "gender": "male",
+    "name": "Samuel",
+    "contact": "00007",
+    "address": "Finland,Siikainen,Satakunta",
+    "photoUrl": "https://randomuser.me/api/portraits/men/40.jpg"
+  },
+  {
+    "id": 8,
+    "gender": "male",
+    "name": "Gavin",
+    "contact": "00008",
+    "address": "United Kingdom,Salisbury,Cambridgeshire",
+    "photoUrl": "https://randomuser.me/api/portraits/men/64.jpg"
+  },
+  {
+    "id": 9,
+    "gender": "male",
+    "name": "Homero",
+    "contact": "0000609",
+    "address": "Brazil,Sertãozinho,Minas Gerais",
+    "photoUrl": "https://randomuser.me/api/portraits/men/13.jpg"
+  },
+  {
+    "id": 10,
+    "gender": "female",
+    "name": "Toligniva",
+    "contact": "(097) U59-4361",
+    "address": "Ukraine,Kremenec,Vinnicka",
+    "photoUrl": "https://randomuser.me/api/portraits/women/65.jpg"
+  },
+  {
+    "id": 11,
+    "gender": "male",
+    "name": "Malthe",
+    "contact": "000011",
+    "address": "Denmark,Vesterborg,Nordjylland",
+    "photoUrl": "https://randomuser.me/api/portraits/men/88.jpg"
+  },
+  {
+    "id": 12,
+    "gender": "male",
+    "name": "ahmed",
+    "contact": "000012",
+    "address": "bd",
+    "photoUrl": "photo"
+  },
+  {
+    "id": 120,
+    "name": "edward",
+    "gender": "male",
+    "contact": "343434",
+    "address": "bd",
+    "photoUrl": "photo"
+  },
+  {
+    "id": 28,
+    "name": "khan",
+    "gender": "sdsd",
+    "contact": "000028",
+    "address": "sdsd",
+    "photoUrl": "sd"
+  }
+]
