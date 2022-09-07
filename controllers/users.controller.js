@@ -1,5 +1,5 @@
 const fs = require('fs');
-const randomUser = fs.readFileSync('randomUser.json');
+const randomUser = fs.readFileSync('model/randomUser.json');
 const request = require('request');
 const getAllrandomUser = JSON.parse(randomUser);
 //get a random user from json file
@@ -61,9 +61,9 @@ module.exports.postData=async(req,res,next)=>{
                 photoUrl:req.body.photoUrl
             }
             
-            const fileData = JSON.parse(fs.readFileSync('randomUser.json'))
+            const fileData = JSON.parse(fs.readFileSync('model/randomUser.json'))
             fileData.push(user);
-            fs.writeFileSync('randomUser.json', JSON.stringify(fileData, null, 2));
+            fs.writeFileSync('model/randomUser.json', JSON.stringify(fileData, null, 2));
             res.send("Random user Added");
         }
       
@@ -93,7 +93,7 @@ module.exports.updatePost=(req,res,next)=>{
                 }
                 const filteringUser = getAllrandomUser.filter(getUser => getUser.id != id);
                 filteringUser.push(user);
-                fs.writeFileSync('randomUser.json', JSON.stringify(filteringUser, null, 2));
+                fs.writeFileSync('model/randomUser.json', JSON.stringify(filteringUser, null, 2));
                 res.send(`updated id ${id}`); 
             }
         
@@ -117,7 +117,7 @@ module.exports.updateSomeUser=(req,res,next)=>{
     user2['contact'] = contact2;
     const user3 = getAllrandomUser.find(u3 => u3.id == id3);
     user3['contact'] = contact3;
-    fs.writeFileSync('randomUser.json', JSON.stringify(getAllrandomUser, null, 2));
+    fs.writeFileSync('model/randomUser.json', JSON.stringify(getAllrandomUser, null, 2));
    
     res.send("User Ids has benn updated");
 }
@@ -129,7 +129,7 @@ module.exports.deletePost=(req,res,next)=>{
     const findingId = getAllrandomUser.find(u => u.id == id);
     if(findingId){
         const remainingRandomUser = getAllrandomUser.filter(remainUser => remainUser.id != id);
-        fs.writeFileSync('randomUser.json', JSON.stringify(remainingRandomUser, null, 2));
+        fs.writeFileSync('model/randomUser.json', JSON.stringify(remainingRandomUser, null, 2));
         res.send(`Deleted id ${id}`);
     }else{
         res.send("User Not Found");

@@ -48,35 +48,11 @@
     "photoUrl": "https://randomuser.me/api/portraits/men/88.jpg"
   },
   {
-    "id": 12,
-    "gender": "male",
-    "name": "ahmed",
-    "contact": "000012",
-    "address": "bd",
-    "photoUrl": "photo"
-  },
-  {
     "id": 120,
     "name": "edward",
     "gender": "male",
     "contact": "343434",
     "address": "bd",
     "photoUrl": "photo"
-  },
-  {
-    "id": 28,
-    "name": "khan",
-    "gender": "sdsd",
-    "contact": "000028",
-    "address": "sdsd",
-    "photoUrl": "sd"
-  },
-  {
-    "id": 23,
-    "name": "ahmed",
-    "gender": "male",
-    "contact": "0003",
-    "address": "bd",
-    "photoUrl": "http://ahmed.jpg"
   }
 ]
